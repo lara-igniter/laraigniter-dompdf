@@ -1,0 +1,35 @@
+{
+    "name": "lara-igniter/laraigniter-dompdf",
+    "description": "A DOMPDF Wrapper for Laraigniter",
+    "keywords": ["laraigniter", "dompf", "pdf"],
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/lara-igniter/laraigniter-dompdf/issues",
+        "source": "https://github.com/lara-igniter/laraigniter-dompdf"
+    },
+    "authors": [
+        {
+            "name": "George Tsachrelias",
+            "email": "george@laraigniter.com"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "dompdf/dompdf": "^3.0",
+        "ext-dom": "*",
+        "lara-elegant/support": "^1.10"
+    },
+    "require-dev": {
+        "codeigniter/framework": "^3.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Laraigniter\\DomPDF\\": "src/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
