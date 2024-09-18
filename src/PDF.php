@@ -159,9 +159,9 @@ class PDF
      */
     public function view(string $view, array $data = [], ?string $encoding = null): self
     {
-        $html = $this->view->render($view, $data);
+        $html = $this->view->make($view, $data)->render();
 
-        return $this->loadHTML($html, $encoding);
+        return $this->html($html, $encoding);
     }
 
     /**
