@@ -47,7 +47,7 @@ class PdfServiceProvider implements PreSystem, PostControllerConstructor
 
         $app = app();
 
-        app('dompdf.wrapper', new App\libraries\PDF($app->dompdf, $app->config, $app->files, $app->view));
+        app('dompdf.wrapper', new PDF($app->dompdf, $app->config, $app->files, $app->view));
     }
 
     protected function registerDomPdfOptions()
