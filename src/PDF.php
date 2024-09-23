@@ -16,7 +16,6 @@ use Exception;
  * A Laraigniter wrapper for Dompdf
  *
  * @package laraigniter-dompdf
- * @author Barry vd. Heuvel
  *
  * @method PDF setBaseHost(string $baseHost)
  * @method PDF setBasePath(string $basePath)

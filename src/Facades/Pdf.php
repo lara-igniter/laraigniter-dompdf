@@ -28,6 +28,8 @@ use Elegant\Support\Facades\Facade;
  * @method static \Laraigniter\DomPDF\PDF save()
  * @method static \CI_Output download(string $filename = 'document.pdf')
  * @method static \CI_Output stream(string $filename = 'document.pdf')
+ *
+ * @see \Laraigniter\DomPDF\PDF
  */
 class Pdf extends Facade
 {
