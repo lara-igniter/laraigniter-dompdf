@@ -427,20 +427,20 @@ class PDF
         $xEndNumber = 37;
 
         $yStartNumber = 20;
-        $yEndNumber = 30;
+        $yEndNumber = 25;
 
         $canvasWidth = $this->dompdf->getCanvas()->get_width();
         $canvasHeight = $this->dompdf->getCanvas()->get_height();
 
-        $fontTextSize = $this->dompdf->getFontMetrics()->getTextWidth($textFormat, $this->getFont(), $size);
+        $fontTextWidth = $this->dompdf->getFontMetrics()->getTextWidth($textFormat, $this->getFont(), $size);
 
         switch ($position) {
             case 'top-right':
-                $x = $canvasWidth - $xEndNumber;
+                $x = $canvasWidth - $xEndNumber - $fontTextWidth;
                 $y = $yStartNumber;
                 break;
             case 'top-center':
-                $x = ($canvasWidth - $xStartNumber) / 2;
+                $x = (($canvasWidth - $xStartNumber) / 2) - ($fontTextWidth / 2);
                 $y = $yStartNumber;
                 break;
             case 'bottom-left':
@@ -448,11 +448,11 @@ class PDF
                 $y = $canvasHeight - $yEndNumber;
                 break;
             case 'bottom-right':
-                $x = $canvasWidth - $xEndNumber;
+                $x = $canvasWidth - $xEndNumber - $fontTextWidth;
                 $y = $canvasHeight - $yEndNumber;
                 break;
             case 'bottom-center':
-                $x = ($canvasWidth - $xStartNumber) / 2;
+                $x = (($canvasWidth - $xStartNumber) / 2) - ($fontTextWidth / 2);
                 $y = $canvasHeight - $yEndNumber;
                 break;
             default:
