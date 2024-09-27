@@ -192,6 +192,52 @@ class PDF
     }
 
     /**
+     * Set DOMPdf Header
+     *
+     * @param string|null $textFormat
+     * @param string $position
+     * @param int $size
+     * @return $this
+     */
+    public function setHeader(string $textFormat = null, string $position = 'right', int $size = 6): self
+    {
+        $textFormat = $textFormat ?: $this->config->config['dompdf']['header']['text_format'];
+
+        $position = $this->config->config['dompdf']['header']['position'] ?: $position;
+
+        if(!is_null($textFormat)) {
+            [$x, $y] = $this->getPosition($textFormat, 'top-' . $position, $size);
+
+            $this->dompdf->getCanvas()->page_text($x, $y, $textFormat, $this->getFont(), $size);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set DOMPdf Footer
+     *
+     * @param string|null $textFormat
+     * @param string $position
+     * @param int $size
+     * @return $this
+     */
+    public function setFooter(string $textFormat = null, string $position = 'right', int $size = 6): self
+    {
+        $textFormat = $textFormat ?: $this->config->config['dompdf']['footer']['text_format'];
+
+        $position = $this->config->config['dompdf']['footer']['position'] ?: $position;
+
+        if(!is_null($textFormat)) {
+            [$x, $y] = $this->getPosition($textFormat, 'bottom-' . $position, $size);
+
+            $this->dompdf->getCanvas()->page_text($x, $y, $textFormat, $this->getFont(), $size);
+        }
+
+        return $this;
+    }
+
+    /**
      * Output the PDF as a string.
      *
      * The option parameter controls the output. Accepted options are:
@@ -347,6 +393,75 @@ class PDF
     protected function fallbackName(string $filename): string
     {
         return str_replace('%', '', Str::ascii($filename));
+    }
+
+    /**
+     * Get dompdf font
+     *
+     * @return string|null
+     */
+    protected function getFont(): ?string
+    {
+        $font = $this->config->config['dompdf']['options']['default_font'];
+
+        return $this->dompdf->getFontMetrics()->getFont($font);
+    }
+
+    /**
+     * Get the x-axis & y-axis based on position at a config file
+     *
+     * @param string $textFormat
+     * @param string $position
+     * @param int $size
+     *
+     * @return array
+     */
+    protected function getPosition(string $textFormat, string $position, int $size): array
+    {
+        $pageNum = $this->dompdf->getCanvas()->get_page_number();
+        $pageCount = $this->dompdf->getCanvas()->get_page_count();
+
+        $textFormat = Str::of($textFormat)->replace('{PAGE_NUM}', $pageNum)->replace('{PAGE_COUNT}', $pageCount)->toString();
+
+        $xStartNumber = 23;
+        $xEndNumber = 37;
+
+        $yStartNumber = 20;
+        $yEndNumber = 30;
+
+        $canvasWidth = $this->dompdf->getCanvas()->get_width();
+        $canvasHeight = $this->dompdf->getCanvas()->get_height();
+
+        $fontTextSize = $this->dompdf->getFontMetrics()->getTextWidth($textFormat, $this->getFont(), $size);
+
+        switch ($position) {
+            case 'top-right':
+                $x = $canvasWidth - $xEndNumber;
+                $y = $yStartNumber;
+                break;
+            case 'top-center':
+                $x = ($canvasWidth - $xStartNumber) / 2;
+                $y = $yStartNumber;
+                break;
+            case 'bottom-left':
+                $x = $xStartNumber;
+                $y = $canvasHeight - $yEndNumber;
+                break;
+            case 'bottom-right':
+                $x = $canvasWidth - $xEndNumber;
+                $y = $canvasHeight - $yEndNumber;
+                break;
+            case 'bottom-center':
+                $x = ($canvasWidth - $xStartNumber) / 2;
+                $y = $canvasHeight - $yEndNumber;
+                break;
+            default:
+                $x = $xStartNumber;
+                $y = $yStartNumber;
+                break;
+        }
+
+        return [$x, $y];
     }
 
     /**

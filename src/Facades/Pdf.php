@@ -20,6 +20,8 @@ use Elegant\Support\Facades\Facade;
  * @method static \Laraigniter\DomPDF\PDF setWarnings(bool $warnings)
  * @method static \Laraigniter\DomPDF\PDF setOption(array|string $attribute, $value = null)
  * @method static \Laraigniter\DomPDF\PDF setOptions(array $options)
+ * @method static \Laraigniter\DomPDF\PDF setHeader(string $textFormat = null, string $position = 'right', int $size = 6)
+ * @method static \Laraigniter\DomPDF\PDF setFooter(string $textFormat = null, string $position = 'right', int $size = 6)
  * @method static \Laraigniter\DomPDF\PDF view(string $view, array $data = [], ?string $encoding = null)
  * @method static \Laraigniter\DomPDF\PDF html(string $string, ?string $encoding = null)
  * @method static \Laraigniter\DomPDF\PDF file(string $file)

@@ -15,6 +15,28 @@ $config = [
 
     'public_path' => null,  // Override the public path if needed
 
+    /**
+     * The default document header.
+     *
+     * Example position: "left", "right", "center"
+     *
+     */
+    'header' => [
+        'text_format' => null, // Override header with setHeader() method
+        'position' => 'left',
+    ],
+
+    /**
+     * The default document footer.
+     *
+     * Example position: "left", "right", "center"
+     *
+     */
+    'footer' => [
+        'text_format' => '{PAGE_NUM} / {PAGE_COUNT}', // Override header with setFooter() method
+        'position' => 'right', // top-left, top-right, top-center, bottom-left, bottom-right, bottom-center
+    ],
+
     /*
      * Dejavu Sans font is missing glyphs for converted entities, turn it off if you need to show € and £.
      */
@@ -117,14 +139,14 @@ $config = [
          * Valid settings are 'PDFLib', 'CPDF' (the bundled R&OS PDF class), 'GD' and
          * 'auto'. 'auto' will look for PDFLib and use it if found, or if not it will
          * fall back on CPDF. 'GD' renders PDFs to graphic files.
-         * {@link * Canvas_Factory} ultimately determines which rendering class to
+         * {@link * CanvasFactory} ultimately determines which rendering class to
          * instantiate based on this setting.
          *
          * Both PDFLib & CPDF rendering backends provide sufficient rendering
          * capabilities for dompdf, however additional features (e.g. object,
          * image and font support, etc.) differ between backends.  Please see
-         * {@link PDFLib_Adapter} for more information on the PDFLib backend
-         * and {@link CPDF_Adapter} and lib/class.pdf.php for more information
+         * {@link Dompdf\Adapter\PDFLib} for more information on the PDFLib backend
+         * and {@link Dompdf\Adapter\CPDF} and lib/class.pdf.php for more information
          * on CPDF. Also see the documentation for each backend at the links
          * below.
          *
@@ -139,7 +161,7 @@ $config = [
          * @link http://www.ros.co.nz/pdf
          * @link http://www.php.net/image
          */
-        'pdf_backend' => 'CPDF',
+        'pdf_backend' =>  Dompdf\Adapter\CPDF::class,
 
         /**
          * html target media view which should be rendered into pdf.
@@ -158,9 +180,10 @@ $config = [
          *
          * North America standard is "letter"; other countries generally "a4"
          *
-         * @see CPDF_Adapter::PAPER_SIZES for valid sizes ('letter', 'legal', 'A4', etc.)
+         * @see Dompdf\Adapter\CPDF::$PAPER_SIZES for valid sizes ('letter', 'legal', 'A4', etc.)
+         * @see Dompdf\Adapter\PDFLib::$PAPER_SIZES for valid sizes ('letter', 'legal', 'A4', etc.)
          */
-        'default_paper_size' => 'a4',
+        'default_paper_size' => Dompdf\Adapter\CPDF::$PAPER_SIZES['a4'],
 
         /**
          * The default paper orientation.
@@ -178,7 +201,7 @@ $config = [
          *
          * @var string
          */
-        'default_font' => 'serif',
+        'default_font' => 'DejaVu Sans', // DejaVu Serif, DejaVu Sans Mono
 
         /**
          * Image DPI setting
@@ -266,7 +289,7 @@ $config = [
          *
          * @var bool
          */
-        'enable_remote' => false,
+        'enable_remote' => true,
 
         /**
          * List of allowed remote hosts
