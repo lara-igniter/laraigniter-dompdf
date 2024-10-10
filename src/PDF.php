@@ -80,6 +80,14 @@ class PDF
      */
     protected string $public_path;
 
+    /**
+     * Initialize the PDF class
+     *
+     * @param Dompdf $dompdf
+     * @param CI_Config $config
+     * @param \Elegant\Filesystem\Filesystem $files
+     * @param object $view
+     */
     public function __construct(Dompdf $dompdf, CI_Config $config, Filesystem $files, object $view)
     {
         $this->dompdf = $dompdf;
@@ -92,6 +100,8 @@ class PDF
 
     /**
      * Get the DomPDF instance
+     *
+     * @return \Dompdf\Dompdf
      */
     public function getDomPDF(): Dompdf
     {
@@ -100,6 +110,8 @@ class PDF
 
     /**
      * Show or hide warnings
+     *
+     * @return $this
      */
     public function setWarnings(bool $warnings): self
     {
@@ -112,6 +124,8 @@ class PDF
      * Load an HTML string
      *
      * @param string|null $encoding Not used yet
+     *
+     * @return $this
      */
     public function html(string $string, ?string $encoding = null): self
     {
@@ -125,6 +139,10 @@ class PDF
 
     /**
      * Load an HTML file
+     *
+     * @param string $file
+     *
+     * @return $this
      *
      * @throws \Dompdf\Exception
      */
@@ -141,6 +159,8 @@ class PDF
      * Add metadata info
      *
      * @param array<string, string> $info
+     *
+     * @return $this
      */
     public function setInfo(array $info): self
     {
@@ -155,6 +175,8 @@ class PDF
      *
      * @param array<string, mixed> $data
      * @param string|null $encoding Not used yet
+     *
+     * @return $this
      */
     public function view(string $view, array $data = [], ?string $encoding = null): self
     {
@@ -168,6 +190,8 @@ class PDF
      *
      * @param array<string, mixed>|string $attribute
      * @param null|mixed $value
+     *
+     * @return $this
      */
     public function setOption($attribute, $value = null): self
     {
@@ -179,6 +203,8 @@ class PDF
      * Replace all the Options from DomPDF
      *
      * @param array<string, mixed> $options
+     *
+     * @return $this
      */
     public function setOptions(array $options, bool $mergeWithDefaults = false): self
     {
@@ -197,15 +223,20 @@ class PDF
      * @param string|null $textFormat
      * @param string $position
      * @param int $size
+     *
      * @return $this
+     *
+     * @throws Exception
      */
     public function setHeader(string $textFormat = null, string $position = 'right', int $size = 6): self
     {
+        $this->render();
+
         $textFormat = $textFormat ?: $this->config->config['dompdf']['header']['text_format'];
 
         $position = $this->config->config['dompdf']['header']['position'] ?: $position;
 
-        if(!is_null($textFormat)) {
+        if (!is_null($textFormat)) {
             [$x, $y] = $this->getPosition($textFormat, 'top-' . $position, $size);
 
             $this->dompdf->getCanvas()->page_text($x, $y, $textFormat, $this->getFont(), $size);
@@ -220,15 +251,20 @@ class PDF
      * @param string|null $textFormat
      * @param string $position
      * @param int $size
+     *
      * @return $this
+     *
+     * @throws Exception
      */
     public function setFooter(string $textFormat = null, string $position = 'right', int $size = 6): self
     {
+        $this->render();
+
         $textFormat = $textFormat ?: $this->config->config['dompdf']['footer']['text_format'];
 
         $position = $this->config->config['dompdf']['footer']['position'] ?: $position;
 
-        if(!is_null($textFormat)) {
+        if (!is_null($textFormat)) {
             [$x, $y] = $this->getPosition($textFormat, 'bottom-' . $position, $size);
 
             $this->dompdf->getCanvas()->page_text($x, $y, $textFormat, $this->getFont(), $size);
@@ -294,7 +330,7 @@ class PDF
             ->set_status_header()
             ->set_content_type('application/pdf')
             ->set_header('Content-Length: ' . strlen($output))
-            ->set_header('Content-Disposition: attachment; filename="' . $fallback .'"')
+            ->set_header('Content-Disposition: attachment; filename="' . $fallback . '"')
             ->set_output($output);
     }
 
@@ -469,6 +505,7 @@ class PDF
      *
      * @param string $method
      * @param array<mixed> $parameters
+     *
      * @return $this|mixed
      */
     public function __call($method, $parameters)
